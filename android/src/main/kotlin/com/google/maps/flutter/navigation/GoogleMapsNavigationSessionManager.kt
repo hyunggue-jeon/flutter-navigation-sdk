@@ -160,20 +160,6 @@ constructor(
 
     taskRemovedBehavior = Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(behavior)
 
-    // Align API behavior with iOS:
-    // If the terms haven't yet been accepted throw an error.
-    if (!areTermsAccepted()) {
-      callback(
-        Result.failure(
-          FlutterError(
-            "termsNotAccepted",
-            "The session initialization failed, because the user has not yet accepted the navigation terms and conditions.",
-          )
-        )
-      )
-      return
-    }
-
     // Enable or disable abnormal termination reporting.
     NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
@@ -223,7 +209,7 @@ constructor(
         }
       }
 
-    NavigationApi.getNavigator(application, listener)
+    NavigationApi.getNavigator(getActivity(), listener)
   }
 
   private fun convertNavigatorErrorToFlutterError(
