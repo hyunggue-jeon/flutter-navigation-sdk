@@ -139,6 +139,18 @@ extension ConvertNavigationAudioGuidanceSettings
   }
 }
 
+/// [SpeedAlertOptions] convert extension.
+/// @nodoc
+extension ConvertSpeedAlertOptions on SpeedAlertOptions {
+  SpeedAlertOptionsDto toDto() {
+    return SpeedAlertOptionsDto(
+      minorSpeedAlertThresholdPercentage: minorSpeedAlertThresholdPercentage,
+      majorSpeedAlertThresholdPercentage: majorSpeedAlertThresholdPercentage,
+      severityUpgradeDurationSeconds: severityUpgradeDurationSeconds,
+    );
+  }
+}
+
 /// [RouteSegmentTrafficDataRoadStretchRenderingDataDto] convert extension.
 /// @nodoc
 extension ConvertRouteSegmentTrafficDataRoadStretchRenderingDataDto
@@ -244,6 +256,34 @@ extension ConvertTaskRemovedBehavior on TaskRemovedBehavior {
         return TaskRemovedBehaviorDto.continueService;
       case TaskRemovedBehavior.quitService:
         return TaskRemovedBehaviorDto.quitService;
+    }
+  }
+}
+
+/// [StepImageGenerationOptionsDto] convert extension.
+/// @nodoc
+extension ConvertStepImageGenerationOptions on StepImageGenerationOptions {
+  /// Converts [StepImageGenerationOptions] to [StepImageGenerationOptionsDto]
+  StepImageGenerationOptionsDto toDto() {
+    return StepImageGenerationOptionsDto(
+      generateManeuverImages: generateManeuverImages,
+      generateLaneImages: generateLaneImages,
+    );
+  }
+}
+
+/// [RegisteredImageType] convert extension.
+/// @nodoc
+extension ConvertRegisteredImageType on RegisteredImageType {
+  /// Converts [RegisteredImageType] to [RegisteredImageTypeDto].
+  RegisteredImageTypeDto toDto() {
+    switch (this) {
+      case RegisteredImageType.regular:
+        return RegisteredImageTypeDto.regular;
+      case RegisteredImageType.maneuver:
+        return RegisteredImageTypeDto.maneuver;
+      case RegisteredImageType.lanes:
+        return RegisteredImageTypeDto.lanes;
     }
   }
 }

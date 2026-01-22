@@ -32,11 +32,17 @@ class GoogleMapsImageRegistryMessageHandler(private val imageRegistry: ImageRegi
     imageDescriptor.registeredImageId?.let { imageRegistry.unregisterImage(it) }
   }
 
-  override fun clearRegisteredImages() {
-    imageRegistry.clearRegisteredImages()
+  override fun clearRegisteredImages(filter: RegisteredImageTypeDto?) {
+    imageRegistry.clearRegisteredImages(filter)
+  }
+
+  override fun getRegisteredImageData(imageDescriptor: ImageDescriptorDto): ByteArray? {
+    return imageRegistry.getRegisteredImageData(imageDescriptor)
   }
 
   override fun getRegisteredImages(): List<ImageDescriptorDto> {
-    return imageRegistry.registeredImages.map { Convert.registeredImageToImageDescriptorDto(it) }
+    return imageRegistry.registeredImages.map {
+      Convert.registeredImageToImageDescriptorDto(it.value)
+    }
   }
 }

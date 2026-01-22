@@ -302,6 +302,20 @@ class NavigationSessionAPIImpl {
     }
   }
 
+  /// Sets speed alert options.
+  Future<void> setSpeedAlertOptions(SpeedAlertOptions options) async {
+    try {
+      return await _sessionApi.setSpeedAlertOptions(options.toDto());
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
+  }
+
   /// Sets user location.
   Future<void> setUserLocation(LatLng location) async {
     try {
@@ -509,10 +523,12 @@ class NavigationSessionAPIImpl {
   /// Enables navigation info updates.
   Future<void> enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
+    StepImageGenerationOptions? options,
   ) async {
     try {
       return await _sessionApi.enableTurnByTurnNavigationEvents(
         numNextStepsToPreview,
+        options?.toDto(),
       );
     } on PlatformException catch (e) {
       switch (e.code) {

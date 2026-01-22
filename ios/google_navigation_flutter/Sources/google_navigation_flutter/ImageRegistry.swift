@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Flutter
 import UIKit
 
 enum GoogleMapsImageRegistryError: Error {
@@ -19,7 +20,7 @@ enum GoogleMapsImageRegistryError: Error {
 }
 
 class ImageRegistry {
-  var registeredImages: [RegisteredImage] = []
+  var registeredImages: [String: RegisteredImage] = [:]
 
   func registerBitmapImage(
     imageId: String, bytes: Data, imagePixelRatio: Double, width: Double?,
@@ -40,31 +41,95 @@ class ImageRegistry {
       image = ImageResizer.resize(image: image, height: CGFloat(height!))
     }
 
-    registeredImages.append(
+    registeredImages[imageId] =
       RegisteredImage(
         imageId: imageId,
         image: image,
         imagePixelRatio: imagePixelRatio,
         width: width,
-        height: height
-      ))
+        height: height,
+        type: .regular
+      )
     return ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,
       width: width,
-      height: height
+      height: height,
+      type: RegisteredImageTypeDto.regular
+    )
+  }
+
+  func registerManeuverImage(
+    imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
+    height: Double?
+  ) throws -> ImageDescriptorDto {
+    registeredImages[imageId] =
+      RegisteredImage(
+        imageId: imageId,
+        image: image,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height,
+        type: .maneuver
+      )
+    return ImageDescriptorDto(
+      registeredImageId: imageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height,
+      type: .maneuver
+    )
+  }
+
+  func registerLaneImage(
+    imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
+    height: Double?
+  ) throws -> ImageDescriptorDto {
+    registeredImages[imageId] =
+      RegisteredImage(
+        imageId: imageId,
+        image: image,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height,
+        type: .lanes
+      )
+    return ImageDescriptorDto(
+      registeredImageId: imageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height,
+      type: .lanes
     )
   }
 
   func findRegisteredImage(imageId: String) -> RegisteredImage? {
-    registeredImages.first(where: { $0.imageId == imageId })
+    registeredImages[imageId]
   }
 
   func unregisterImage(imageId: String) {
-    registeredImages.removeAll(where: { $0.imageId == imageId })
+    registeredImages.removeValue(forKey: imageId)
   }
 
-  func clearRegisteredImages() {
-    registeredImages.removeAll()
+  func clearRegisteredImages(filter: RegisteredImageTypeDto?) {
+    guard let filter else {
+      registeredImages.removeAll()
+      return
+    }
+    registeredImages = registeredImages.filter { (_, image) in
+      image.type != Convert.registeredImageType(type: filter)
+    }
+  }
+
+  func getRegisteredImageData(imageDescriptor: ImageDescriptorDto) throws
+    -> FlutterStandardTypedData?
+  {
+    guard
+      let data = findRegisteredImage(imageId: imageDescriptor.registeredImageId ?? "")?.image
+        .pngData()
+    else {
+      return nil
+    }
+    return FlutterStandardTypedData(bytes: data)
   }
 }
