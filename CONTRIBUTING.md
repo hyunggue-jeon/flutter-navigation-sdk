@@ -7,10 +7,10 @@ _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#cod
 - **Operating System:** Linux, macOS, or Windows.
 - **Version Control:** [git](https://git-scm.com).
 - **Development Environment:** An IDE such as [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/).
-- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-formatt). 
+- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-format). 
 
 ### 1.1. Installing swift-format
-The CI is locked to swift-format 600.0.0 version which you can install with the command below:
+The CI is locked to swift-format 602.0.0 which you can install with the command below:
 ```bash
 curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/402e262f48947bad849ea7793752ff16b7038406/Formula/s/swift-format.rb
 brew install swift-format.rb
@@ -132,7 +132,7 @@ Specify the device you want to run the tests on with the DEVICE env variable.
 Integration tests are responsible for ensuring that the plugin works against the native Navigation SDK for both Android and iOS platforms. Patrol is used for the integration tests to simplify interactions with native elements. To use patrol, you first need to activate the patrol_cli.  
 
 ```bash
-flutter pub global activate patrol_cli 3.10.0
+flutter pub global activate patrol_cli 4.3.1
 ```
 
 To ensure that all necessary dependencies for patrol are properly set up, run the following command:
@@ -152,7 +152,7 @@ To only run a specific test file, use patrol command with -t flag. For example t
 
 ```bash
 cd ./example
-patrol test --dart-define MAPS_API_KEY=YOUR_API_KEY -t integration_test/navigation_test.dart
+patrol test --dart-define MAPS_API_KEY=YOUR_API_KEY -t patrol_test/navigation_test.dart
 ```
 
 Test report should appear in the build folder:
@@ -172,7 +172,7 @@ For debugging the tests, you can add `debugPrint()` functions in your test and u
 
 ```bash
 cd ./example
-patrol develop --dart-define MAPS_API_KEY=YOUR_API_KEY --verbose -t integration_test/navigation_test.dart
+patrol develop --dart-define MAPS_API_KEY=YOUR_API_KEY --verbose -t patrol_test/navigation_test.dart
 ```
 
 Please note that the "hot restart" feature in patrol's develop mode may not work correctly with all test files.

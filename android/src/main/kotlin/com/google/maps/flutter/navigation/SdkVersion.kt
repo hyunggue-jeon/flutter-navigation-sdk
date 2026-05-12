@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-@import ObjectiveC.runtime;
-@import XCTest;
-@import patrol;
+package com.google.maps.flutter.navigation
 
-// These macros are normally defined by patrol_cli during `patrol test` builds.
-// Define defaults here so that xcodebuild can compile this target independently
-// (e.g., when running native unit tests via `xcodebuild test -only-testing RunnerTests`).
-#ifndef CLEAR_PERMISSIONS
-#define CLEAR_PERMISSIONS 0
-#endif
-#ifndef FULL_ISOLATION
-#define FULL_ISOLATION 0
-#endif
+/** SDK version constants for internal usage attribution. */
+object SdkVersion {
+  const val VERSION = "0.9.1" // {x-release-please-version}
 
-PATROL_INTEGRATION_TEST_IOS_RUNNER(RunnerUITests)
+  const val ATTRIBUTION_ID = "gmp_git_flutternavigationsdk_v${VERSION}_android"
+}

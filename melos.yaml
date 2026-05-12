@@ -180,6 +180,8 @@ scripts:
         --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
         --ignore "**/example/integration_test/test_bundle.dart" \
+        --ignore "**/example/ios/Flutter/ephemeral/**" \
+        --ignore "**/example/android/.idea/**" \
         --ignore "build/**" \
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
@@ -199,6 +201,8 @@ scripts:
         --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
         --ignore "**/example/integration_test/test_bundle.dart" \
+        --ignore "**/example/ios/Flutter/ephemeral/**" \
+        --ignore "**/example/android/.idea/**" \
         --ignore "build/**" \
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \

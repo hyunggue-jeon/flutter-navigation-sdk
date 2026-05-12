@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.9.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.0...0.9.1) (2026-04-30)
+
+
+### Features
+
+* internal usage attribution ID ([#669](https://github.com/googlemaps/flutter-navigation-sdk/issues/669)) ([6051017](https://github.com/googlemaps/flutter-navigation-sdk/commit/6051017d2310db2ffe8516bc63addfefb8485b78))
+
+## [0.9.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.4...0.9.0) (2026-04-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* continueToNextDestination() return type changed from NavigationWaypoint? to ContinueToNextDestinationResponse, which contains waypoint (NavigationWaypoint?) and routeStatus (NavigationRouteStatus?, iOS only). The method has also been un-deprecated and it is now the recommended way to advance to the next waypoint when navigating to multiple destinations.
+
+### Features
+
+* upgrade Nav SDKs to Android 7.6.0 and iOS 10.12.0 ([#664](https://github.com/googlemaps/flutter-navigation-sdk/issues/664)) ([013f386](https://github.com/googlemaps/flutter-navigation-sdk/commit/013f386eae48b27b8c10cfc9e38dab494e058a41))
+
+
+### Bug Fixes
+
+* adds missing mapping for onMyLocationClicked and onMyLocationButtonClicked events ([#666](https://github.com/googlemaps/flutter-navigation-sdk/issues/666)) ([caad31b](https://github.com/googlemaps/flutter-navigation-sdk/commit/caad31b5aca9dd4f7c710dd41dff09ebdc6b1a2e))
+
+## [0.8.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.3...0.8.4) (2026-04-01)
+
+
+### Features
+
+* upgrade navigation SDK for Android to version 7.5.0 ([#640](https://github.com/googlemaps/flutter-navigation-sdk/issues/640)) ([8373ae7](https://github.com/googlemaps/flutter-navigation-sdk/commit/8373ae791880f9567fae07754f925b4ed177d659))
+
+## [0.8.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.2...0.8.3) (2026-03-13)
+
+
+### Features
+
+* upgrade Android (7.4.0) and iOS (10.10.0) Nav SDKs ([#624](https://github.com/googlemaps/flutter-navigation-sdk/issues/624)) ([004f6a1](https://github.com/googlemaps/flutter-navigation-sdk/commit/004f6a108edcbca7cba457f9da6930557b3101d7))
+
 ## [0.8.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.1...0.8.2) (2026-01-20)
 
 

@@ -30,7 +30,7 @@ jobs:
     runs-on:
       labels: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         name: Checkout code
       - uses: actions/setup-java@v4
         name: Setup java
@@ -38,7 +38,7 @@ jobs:
           distribution: "temurin"
           java-version: "17"
           cache: "gradle"
-      - uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         name: Setup flutter
         with:
           flutter-version: "3.38.x"
@@ -57,7 +57,7 @@ jobs:
       labels: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup java
         uses: actions/setup-java@v4
         with:
@@ -65,7 +65,7 @@ jobs:
           java-version: "17"
           cache: "gradle"
       - name: Setup flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: "3.38.x"
           channel: "stable"
@@ -93,9 +93,9 @@ jobs:
       working_directory: "example"
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: "3.38.x"
           channel: "stable"
@@ -111,13 +111,13 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      - name: Select XCode 16.4
-        run: sudo xcode-select -s '/Applications/Xcode_16.4.0.app/Contents/Developer'
+      - name: Select XCode 26.3
+        run: sudo xcode-select -s '/Applications/Xcode_26.3.0.app/Contents/Developer'
       - name: Generate necessary files with flutter build
         working-directory: ${{ env.working_directory }}
         run: flutter build ios --config-only
       - name: "Run iOS native unit tests"
-        run: TEST_DEVICE='iPhone 16 Pro' TEST_OS='18.5' melos run test:ios
+        run: TEST_DEVICE='iPhone 16 Pro' TEST_OS='26.2' melos run test:ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -137,7 +137,7 @@ jobs:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup java
         uses: actions/setup-java@v4
         with:
@@ -145,7 +145,7 @@ jobs:
           java-version: "17"
           cache: "gradle"
       - name: Setup flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: "3.38.x"
           channel: "stable"
@@ -180,9 +180,9 @@ jobs:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: "3.38.x"
           channel: "stable"
@@ -203,8 +203,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ runner.os }}-build-artifact
-      - name: Select XCode 16.4
-        run: sudo xcode-select -s '/Applications/Xcode_16.4.0.app/Contents/Developer'
+      - name: Select XCode 26.3
+        run: sudo xcode-select -s '/Applications/Xcode_26.3.0.app/Contents/Developer'
       - name: "Run build for iOS"
         run: melos run flutter-build-ios
       - name: Upload build artifact
@@ -226,7 +226,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "3.10.0"
+      patrol_cli_version: "4.3.1"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -235,7 +235,7 @@ jobs:
           echo "MAPS_API_KEY is not available or empty."
           exit 1
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup java
         uses: actions/setup-java@v4
         with:
@@ -255,7 +255,7 @@ jobs:
           path: ~/.android/adb*
           key: adb-keys
       - name: Setup flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: "3.38.x"
           channel: "stable"
@@ -288,17 +288,17 @@ jobs:
       - name: Create and start emulator
         run: |
           echo "Installing system image..."
-          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
+          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-35;google_atd;x86_64"
 
           echo "Setting ANDROID_AVD_HOME"
           export ANDROID_AVD_HOME=$HOME/.config/.android/avd
           mkdir -p $ANDROID_AVD_HOME
 
           echo "Creating AVD..."
-          echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-30;google_apis;x86_64" --force
+          echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-35;google_atd;x86_64" --force
 
           echo "Starting emulator"
-          $ANDROID_SDK_ROOT/emulator/emulator -avd test_emulator -no-audio -no-boot-anim -no-window -no-snapshot &
+          $ANDROID_SDK_ROOT/emulator/emulator -avd test_emulator -no-audio -no-boot-anim -no-window -no-snapshot -gpu swiftshader_indirect &
           adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           adb devices
       - name: Generate gradlew file with flutter build
@@ -307,7 +307,7 @@ jobs:
       - name: Run integration tests
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
+          patrol test --dart-define=IS_CI=true ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -322,13 +322,13 @@ jobs:
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on:
-      labels: macos-15-xlarge
+      labels: macos-latest-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "3.10.0"
+      patrol_cli_version: "4.3.1"
       working_directory: "example"
-      IOS_VERSION: "18.6"
+      IOS_VERSION: "26.2"
     steps:
       - name: Fail if workflow has no access to API key
         if: ${{ env.MAPS_API_KEY == '' }}
@@ -336,15 +336,15 @@ jobs:
           echo "MAPS_API_KEY is not available or empty."
           exit 1
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: "3.38.x"
           channel: "stable"
           cache: true
-      - name: Select XCode 16.4
-        run: sudo xcode-select -s '/Applications/Xcode_16.4.0.app/Contents/Developer'
+      - name: Select XCode 26.3
+        run: sudo xcode-select -s '/Applications/Xcode_26.3.0.app/Contents/Developer'
       - name: Start iOS simulator
         run: |
           SIMULATOR_NAME="iPhone 16 Pro"
@@ -395,7 +395,7 @@ jobs:
         id: tests_step
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
+          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --dart-define=IS_CI=true --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
