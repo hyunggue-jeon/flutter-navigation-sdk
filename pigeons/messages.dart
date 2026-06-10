@@ -36,6 +36,36 @@ enum MapViewTypeDto {
   map,
 }
 
+/// Object containing auto/carplay map options.
+class AutoMapOptionsDto {
+  AutoMapOptionsDto({
+    this.cameraPosition,
+    this.mapId,
+    this.mapType,
+    this.mapColorScheme,
+    this.forceNightMode,
+    this.navigationUIEnabledPreference,
+  });
+
+  /// The initial positioning of the camera in the map view.
+  final CameraPositionDto? cameraPosition;
+
+  /// Cloud-based map ID for custom styling.
+  final String? mapId;
+
+  /// The type of map to display (e.g., satellite, terrain, hybrid, etc.).
+  final MapTypeDto? mapType;
+
+  /// The color scheme for the map (light, dark, or follow system).
+  final MapColorSchemeDto? mapColorScheme;
+
+  /// Forces night mode (dark theme) regardless of system settings.
+  final NavigationForceNightModeDto? forceNightMode;
+
+  /// Determines the initial visibility of the navigation UI on map initialization.
+  final NavigationUIEnabledPreferenceDto? navigationUIEnabledPreference;
+}
+
 /// Object containing map options used to initialize Google Map view.
 class MapOptionsDto {
   MapOptionsDto({
@@ -307,6 +337,39 @@ class PointOfInterestDto {
   final LatLngDto latLng;
 }
 
+/// Represents one indoor level of a focused indoor building.
+class IndoorLevelDto {
+  const IndoorLevelDto({required this.name, required this.shortName});
+
+  /// Full display name of the level.
+  final String? name;
+
+  /// Short display name of the level.
+  final String? shortName;
+}
+
+/// Represents focused indoor building metadata.
+class IndoorBuildingDto {
+  const IndoorBuildingDto({
+    required this.levels,
+    this.activeLevelIndex,
+    this.defaultLevelIndex,
+    this.isUnderground,
+  });
+
+  /// All levels available in the focused building.
+  final List<IndoorLevelDto?> levels;
+
+  /// Currently active level index in [levels], if known.
+  final int? activeLevelIndex;
+
+  /// Default level index in [levels], if known.
+  final int? defaultLevelIndex;
+
+  /// Whether building is mostly underground, if known.
+  final bool? isUnderground;
+}
+
 class PolygonDto {
   const PolygonDto({required this.polygonId, required this.options});
 
@@ -544,6 +607,19 @@ abstract class MapViewApi {
   bool isBuildingsEnabled(int viewId);
   void setBuildingsEnabled(int viewId, bool enabled);
 
+  bool isIndoorEnabled(int viewId);
+  void setIndoorEnabled(int viewId, bool enabled);
+
+  bool isIndoorLevelPickerEnabled(int viewId);
+  void setIndoorLevelPickerEnabled(int viewId, bool enabled);
+
+  IndoorBuildingDto? getFocusedIndoorBuilding(int viewId);
+
+  /// Activates the indoor level at [levelIndex] within the currently focused
+  /// indoor building. Throws if no building is focused or the index is out of
+  /// range.
+  void activateIndoorLevel(int viewId, int levelIndex);
+
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
 
@@ -689,6 +765,8 @@ abstract class ViewEventApi {
   void onPromptVisibilityChanged(int viewId, bool promptVisible);
   void onMyLocationClicked(int viewId);
   void onMyLocationButtonClicked(int viewId);
+  void onIndoorFocusedBuildingChanged(int viewId, IndoorBuildingDto? building);
+  void onIndoorActiveLevelChanged(int viewId, IndoorBuildingDto? building);
   void onCameraChanged(
     int viewId,
     CameraEventTypeDto eventType,
@@ -1496,8 +1574,13 @@ abstract class NavigationSessionEventApi {
   void onNewNavigationSession();
 }
 
-@HostApi()
+@HostApi(dartHostTestHandler: 'TestAutoMapViewApi')
 abstract class AutoMapViewApi {
+  /// Sets the map options to be used for Android Auto and CarPlay views.
+  /// Should be called before the Auto/CarPlay screen is created.
+  /// This allows customization of mapId and basic map settings.
+  void setAutoMapOptions(AutoMapOptionsDto mapOptions);
+
   bool isMyLocationEnabled();
   void setMyLocationEnabled(bool enabled);
   LatLngDto? getMyLocation();
@@ -1565,6 +1648,12 @@ abstract class AutoMapViewApi {
   void setTiltGesturesEnabled(bool enabled);
   void setMapToolbarEnabled(bool enabled);
   void setTrafficEnabled(bool enabled);
+  void setTrafficPromptsEnabled(bool enabled);
+  void setTrafficIncidentCardsEnabled(bool enabled);
+  void setNavigationTripProgressBarEnabled(bool enabled);
+  void setSpeedLimitIconEnabled(bool enabled);
+  void setSpeedometerEnabled(bool enabled);
+  void setNavigationUIEnabled(bool enabled);
 
   bool isMyLocationButtonEnabled();
   bool isConsumeMyLocationButtonClickEventsEnabled();
@@ -1577,6 +1666,19 @@ abstract class AutoMapViewApi {
   bool isTiltGesturesEnabled();
   bool isMapToolbarEnabled();
   bool isTrafficEnabled();
+  bool isTrafficPromptsEnabled();
+  bool isTrafficIncidentCardsEnabled();
+  bool isNavigationTripProgressBarEnabled();
+  bool isSpeedLimitIconEnabled();
+  bool isSpeedometerEnabled();
+  bool isNavigationUIEnabled();
+
+  bool isIndoorEnabled();
+  void setIndoorEnabled(bool enabled);
+  IndoorBuildingDto? getFocusedIndoorBuilding();
+  void activateIndoorLevel(int levelIndex);
+
+  void showRouteOverview();
 
   List<MarkerDto> getMarkers();
   List<MarkerDto> addMarkers(List<MarkerDto> markers);
@@ -1607,12 +1709,22 @@ abstract class AutoMapViewApi {
   bool isAutoScreenAvailable();
   void setPadding(MapPaddingDto padding);
   MapPaddingDto getPadding();
+
+  MapColorSchemeDto getMapColorScheme();
+  void setMapColorScheme(MapColorSchemeDto mapColorScheme);
+  NavigationForceNightModeDto getForceNightMode();
+  void setForceNightMode(NavigationForceNightModeDto forceNightMode);
+
+  void sendCustomNavigationAutoEvent(String event, Object data);
 }
 
 @FlutterApi()
 abstract class AutoViewEventApi {
   void onCustomNavigationAutoEvent(String event, Object data);
   void onAutoScreenAvailabilityChanged(bool isAvailable);
+  void onPromptVisibilityChanged(bool promptVisible);
+  void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building);
+  void onIndoorActiveLevelChanged(IndoorBuildingDto? building);
 }
 
 @HostApi()

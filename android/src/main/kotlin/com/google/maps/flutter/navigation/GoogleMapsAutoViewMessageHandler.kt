@@ -22,13 +22,31 @@ import android.content.res.Resources
 class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) :
   AutoMapViewApi {
 
-  private fun getView(): GoogleMapsBaseMapView {
-    val view = viewRegistry.getAndroidAutoView()
-    if (view != null) {
-      return view
-    } else {
-      throw FlutterError("viewNotFound", "No valid android auto view found")
-    }
+  private fun getView(): GoogleMapsAutoMapView {
+    return viewRegistry.getAndroidAutoView()
+      ?: throw FlutterError("viewNotFound", "No valid android auto view found")
+  }
+
+  override fun setAutoMapOptions(mapOptions: AutoMapOptionsDto) {
+    // Store the map options in AndroidAutoBaseScreen companion object
+    // Convert DTO to a simple data holder
+    val options =
+      AutoMapViewOptions(
+        cameraPosition = mapOptions.cameraPosition,
+        mapId = mapOptions.mapId,
+        mapType = mapOptions.mapType?.let { Convert.convertMapTypeFromDto(it) },
+        mapColorScheme =
+          mapOptions.mapColorScheme?.let { Convert.convertMapColorSchemeFromDto(it) },
+        forceNightMode =
+          mapOptions.forceNightMode?.let { Convert.convertNavigationForceNightModeFromDto(it) },
+        navigationUIEnabledPreference =
+          when (mapOptions.navigationUIEnabledPreference) {
+            NavigationUIEnabledPreferenceDto.AUTOMATIC -> NavigationUIEnabledPreference.AUTOMATIC
+            NavigationUIEnabledPreferenceDto.DISABLED -> NavigationUIEnabledPreference.DISABLED
+            null -> NavigationUIEnabledPreference.AUTOMATIC
+          },
+      )
+    AndroidAutoBaseScreen.mapOptions = options
   }
 
   override fun isMyLocationEnabled(): Boolean {
@@ -99,6 +117,50 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     getView().setTrafficEnabled(enabled)
   }
 
+  override fun setTrafficPromptsEnabled(enabled: Boolean) {
+    getView().setTrafficPromptsEnabled(enabled)
+  }
+
+  override fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
+    getView().setTrafficIncidentCardsEnabled(enabled)
+  }
+
+  override fun isNavigationTripProgressBarEnabled(): Boolean {
+    return getView().isNavigationTripProgressBarEnabled()
+  }
+
+  override fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
+    getView().setNavigationTripProgressBarEnabled(enabled)
+  }
+
+  override fun isSpeedLimitIconEnabled(): Boolean {
+    return getView().isSpeedLimitIconEnabled()
+  }
+
+  override fun setSpeedLimitIconEnabled(enabled: Boolean) {
+    getView().setSpeedLimitIconEnabled(enabled)
+  }
+
+  override fun isSpeedometerEnabled(): Boolean {
+    return getView().isSpeedometerEnabled()
+  }
+
+  override fun setSpeedometerEnabled(enabled: Boolean) {
+    getView().setSpeedometerEnabled(enabled)
+  }
+
+  override fun isNavigationUIEnabled(): Boolean {
+    return getView().isNavigationUIEnabled()
+  }
+
+  override fun setNavigationUIEnabled(enabled: Boolean) {
+    getView().setNavigationUIEnabled(enabled)
+  }
+
+  override fun showRouteOverview() {
+    getView().showRouteOverview()
+  }
+
   override fun isMyLocationButtonEnabled(): Boolean {
     return getView().isMyLocationButtonEnabled()
   }
@@ -141,6 +203,14 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
 
   override fun isTrafficEnabled(): Boolean {
     return getView().isTrafficEnabled()
+  }
+
+  override fun isTrafficPromptsEnabled(): Boolean {
+    return getView().isTrafficPromptsEnabled()
+  }
+
+  override fun isTrafficIncidentCardsEnabled(): Boolean {
+    return getView().isTrafficIncidentCardsEnabled()
   }
 
   override fun getMyLocation(): LatLngDto? {
@@ -386,11 +456,51 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     return viewRegistry.getAndroidAutoView() != null
   }
 
+  override fun isIndoorEnabled(): Boolean {
+    return getView().isIndoorEnabled()
+  }
+
+  override fun setIndoorEnabled(enabled: Boolean) {
+    getView().setIndoorEnabled(enabled)
+  }
+
+  override fun getFocusedIndoorBuilding(): IndoorBuildingDto? {
+    return getView().getFocusedIndoorBuilding()
+  }
+
+  override fun activateIndoorLevel(levelIndex: Long) {
+    getView().activateIndoorLevel(levelIndex.toInt())
+  }
+
   override fun setPadding(padding: MapPaddingDto) {
     getView().setPadding(padding)
   }
 
   override fun getPadding(): MapPaddingDto {
     return getView().getPadding()
+  }
+
+  override fun getMapColorScheme(): MapColorSchemeDto {
+    val colorScheme = getView().getMapColorScheme()
+    return Convert.convertMapColorSchemeToDto(colorScheme)
+  }
+
+  override fun setMapColorScheme(mapColorScheme: MapColorSchemeDto) {
+    val colorScheme = Convert.convertMapColorSchemeFromDto(mapColorScheme)
+    getView().setMapColorScheme(colorScheme)
+  }
+
+  override fun getForceNightMode(): NavigationForceNightModeDto {
+    val forceNightMode = getView().getForceNightMode()
+    return Convert.convertNavigationForceNightModeToDto(forceNightMode)
+  }
+
+  override fun setForceNightMode(forceNightMode: NavigationForceNightModeDto) {
+    val nightMode = Convert.convertNavigationForceNightModeFromDto(forceNightMode)
+    getView().setForceNightMode(nightMode)
+  }
+
+  override fun sendCustomNavigationAutoEvent(event: String, data: Any) {
+    getView().onCustomNavigationAutoEventFromFlutter(event, data)
   }
 }

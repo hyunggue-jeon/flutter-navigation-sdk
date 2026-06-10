@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.9.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.3...0.9.4) (2026-06-09)
+
+
+### Features
+
+* add indoor map controls for map and navigation views ([#716](https://github.com/googlemaps/flutter-navigation-sdk/issues/716)) ([d2c3319](https://github.com/googlemaps/flutter-navigation-sdk/commit/d2c33196aea539a623d785a126da4cb09639ed8b))
+* support custom Flutter messages to auto views ([#719](https://github.com/googlemaps/flutter-navigation-sdk/issues/719)) ([6b810b0](https://github.com/googlemaps/flutter-navigation-sdk/commit/6b810b00a0663cec84a882a0db8f5a2db55eb34b))
+
+## [0.9.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.2...0.9.3) (2026-06-05)
+
+
+### Features
+
+* add missing features for Android Auto and CarPlay ([#568](https://github.com/googlemaps/flutter-navigation-sdk/issues/568)) ([0329316](https://github.com/googlemaps/flutter-navigation-sdk/commit/0329316569e9efda591db1868506a55e680acb90))
+* modernize Android build toolchain ([#711](https://github.com/googlemaps/flutter-navigation-sdk/issues/711)) ([02426c7](https://github.com/googlemaps/flutter-navigation-sdk/commit/02426c7f51b5e6955669172338eece7a2bd03c89))
+
+## [0.9.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.1...0.9.2) (2026-05-25)
+
+
+### Features
+
+* upgrade Android SDK to 7.6.1 ([#691](https://github.com/googlemaps/flutter-navigation-sdk/issues/691)) ([709fe1f](https://github.com/googlemaps/flutter-navigation-sdk/commit/709fe1f433ff4b8b711a08869fdcab8e71169411))
+* upgrade iOS SDK to 10.13.0 ([#692](https://github.com/googlemaps/flutter-navigation-sdk/issues/692)) ([261bc10](https://github.com/googlemaps/flutter-navigation-sdk/commit/261bc10831fac53897c7971e81af9ebde216705c))
+
 ## [0.9.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.0...0.9.1) (2026-04-30)
 
 

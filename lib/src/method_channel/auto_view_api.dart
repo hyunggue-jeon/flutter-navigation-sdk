@@ -67,9 +67,8 @@ class AutoMapViewAPIImpl {
   }
 
   Stream<T> _unwrapEventStream<T>() {
-    // If event that does not
     return _autoEventStreamController.stream
-        .where((_AutoEventWrapper wrapper) => (wrapper.event is T))
+        .where((_AutoEventWrapper wrapper) => wrapper.event is T)
         .map<T>((_AutoEventWrapper wrapper) => wrapper.event as T);
   }
 
@@ -84,6 +83,20 @@ class AutoMapViewAPIImpl {
       );
       _viewApiHasBeenSetUp = true;
     }
+  }
+
+  /// Sets the map options to be used for Android Auto and CarPlay views.
+  Future<void> setAutoMapOptions({required AutoMapOptions mapOptions}) {
+    final AutoMapOptionsDto mapOptionsDto = AutoMapOptionsDto(
+      cameraPosition: mapOptions.cameraPosition?.toDto(),
+      mapId: mapOptions.mapId,
+      mapType: mapOptions.mapType?.toDto(),
+      mapColorScheme: mapOptions.mapColorScheme?.toDto(),
+      forceNightMode: mapOptions.forceNightMode?.toDto(),
+      navigationUIEnabledPreference: mapOptions.navigationUIEnabledPreference
+          .toDto(),
+    );
+    return _viewApi.setAutoMapOptions(mapOptionsDto);
   }
 
   /// Get the preference for whether the my location should be enabled or disabled.
@@ -254,7 +267,7 @@ class AutoMapViewAPIImpl {
         unawaited(
           _viewApi
               .animateCameraToCameraPosition(
-                cameraUpdate.cameraPosition!.toCameraPosition(),
+                cameraUpdate.cameraPosition!.toDto(),
                 duration,
               )
               .then(
@@ -349,9 +362,7 @@ class AutoMapViewAPIImpl {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
         return _viewApi
-            .moveCameraToCameraPosition(
-              cameraUpdate.cameraPosition!.toCameraPosition(),
-            )
+            .moveCameraToCameraPosition(cameraUpdate.cameraPosition!.toDto())
             .wrapPlatformException();
       case CameraUpdateType.latLng:
         return _viewApi
@@ -726,6 +737,30 @@ class AutoMapViewAPIImpl {
   Future<bool> isAutoScreenAvailable() =>
       _viewApi.isAutoScreenAvailable().wrapPlatformException();
 
+  /// Gets whether indoor maps are enabled for the auto view.
+  Future<bool> isIndoorEnabled() =>
+      _viewApi.isIndoorEnabled().wrapPlatformException();
+
+  /// Enables or disables indoor maps for the auto view.
+  Future<void> setIndoorEnabled({required bool enabled}) =>
+      _viewApi.setIndoorEnabled(enabled).wrapPlatformException();
+
+  /// Returns the currently focused indoor building, if available.
+  Future<IndoorBuilding?> getFocusedIndoorBuilding() async {
+    final IndoorBuildingDto? building = await _viewApi
+        .getFocusedIndoorBuilding()
+        .wrapPlatformException();
+    return building?.toIndoorBuilding();
+  }
+
+  /// Activates an indoor level in the currently focused indoor building.
+  ///
+  /// Asserts that [levelIndex] is greater than or equal to 0.
+  Future<void> activateIndoorLevel({required int levelIndex}) {
+    assert(levelIndex >= 0, 'levelIndex must be greater than or equal to 0');
+    return _viewApi.activateIndoorLevel(levelIndex).wrapPlatformException();
+  }
+
   /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {
     return _unwrapEventStream<CustomNavigationAutoEvent>();
@@ -735,6 +770,103 @@ class AutoMapViewAPIImpl {
   Stream<AutoScreenAvailabilityChangedEvent>
   getAutoScreenAvailabilityChangedEventStream() {
     return _unwrapEventStream<AutoScreenAvailabilityChangedEvent>();
+  }
+
+  /// Get prompt visibility changed event stream from the auto view.
+  Stream<PromptVisibilityChangedEvent> getPromptVisibilityChangedEventStream() {
+    return _unwrapEventStream<PromptVisibilityChangedEvent>();
+  }
+
+  /// Get focused indoor building changed event stream from the auto view.
+  Stream<IndoorFocusedBuildingChangedEvent>
+  getIndoorFocusedBuildingChangedEventStream() {
+    return _unwrapEventStream<IndoorFocusedBuildingChangedEvent>();
+  }
+
+  /// Get active indoor level changed event stream from the auto view.
+  Stream<IndoorActiveLevelChangedEvent>
+  getIndoorActiveLevelChangedEventStream() {
+    return _unwrapEventStream<IndoorActiveLevelChangedEvent>();
+  }
+
+  Future<void> setTrafficPromptsEnabled({required bool enabled}) {
+    return _viewApi.setTrafficPromptsEnabled(enabled);
+  }
+
+  Future<bool> isTrafficPromptsEnabled() {
+    return _viewApi.isTrafficPromptsEnabled();
+  }
+
+  Future<void> setTrafficIncidentCardsEnabled({required bool enabled}) {
+    return _viewApi.setTrafficIncidentCardsEnabled(enabled);
+  }
+
+  Future<bool> isTrafficIncidentCardsEnabled() {
+    return _viewApi.isTrafficIncidentCardsEnabled();
+  }
+
+  Future<bool> isNavigationTripProgressBarEnabled() {
+    return _viewApi.isNavigationTripProgressBarEnabled();
+  }
+
+  Future<void> setNavigationTripProgressBarEnabled({required bool enabled}) {
+    return _viewApi.setNavigationTripProgressBarEnabled(enabled);
+  }
+
+  Future<bool> isSpeedLimitIconEnabled() {
+    return _viewApi.isSpeedLimitIconEnabled();
+  }
+
+  Future<void> setSpeedLimitIconEnabled({required bool enabled}) {
+    return _viewApi.setSpeedLimitIconEnabled(enabled);
+  }
+
+  Future<bool> isSpeedometerEnabled() {
+    return _viewApi.isSpeedometerEnabled();
+  }
+
+  Future<void> setSpeedometerEnabled({required bool enabled}) {
+    return _viewApi.setSpeedometerEnabled(enabled);
+  }
+
+  Future<bool> isNavigationUIEnabled() {
+    return _viewApi.isNavigationUIEnabled();
+  }
+
+  Future<void> setNavigationUIEnabled({required bool enabled}) {
+    return _viewApi.setNavigationUIEnabled(enabled);
+  }
+
+  Future<void> showRouteOverview() {
+    return _viewApi.showRouteOverview();
+  }
+
+  Future<MapColorScheme> getMapColorScheme() async {
+    final MapColorSchemeDto colorScheme = await _viewApi.getMapColorScheme();
+    return colorScheme.toMapColorScheme();
+  }
+
+  Future<void> setMapColorScheme({required MapColorScheme mapColorScheme}) {
+    return _viewApi.setMapColorScheme(mapColorScheme.toDto());
+  }
+
+  Future<NavigationForceNightMode> getForceNightMode() async {
+    final NavigationForceNightModeDto forceNightMode = await _viewApi
+        .getForceNightMode();
+    return forceNightMode.toNavigationForceNightMode();
+  }
+
+  Future<void> setForceNightMode({
+    required NavigationForceNightMode forceNightMode,
+  }) {
+    return _viewApi.setForceNightMode(forceNightMode.toDto());
+  }
+
+  Future<void> sendCustomNavigationAutoEvent({
+    required String event,
+    required Object data,
+  }) {
+    return _viewApi.sendCustomNavigationAutoEvent(event, data);
   }
 }
 
@@ -758,6 +890,31 @@ class AutoViewEventApiImpl implements AutoViewEventApi {
     _viewEventStreamController.add(
       _AutoEventWrapper(
         AutoScreenAvailabilityChangedEvent(isAvailable: isAvailable),
+      ),
+    );
+  }
+
+  @override
+  void onPromptVisibilityChanged(bool promptVisible) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(PromptVisibilityChangedEvent(promptVisible)),
+    );
+  }
+
+  @override
+  void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(
+        IndoorFocusedBuildingChangedEvent(building?.toIndoorBuilding()),
+      ),
+    );
+  }
+
+  @override
+  void onIndoorActiveLevelChanged(IndoorBuildingDto? building) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(
+        IndoorActiveLevelChangedEvent(building?.toIndoorBuilding()),
       ),
     );
   }

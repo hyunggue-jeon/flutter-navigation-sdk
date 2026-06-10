@@ -18,18 +18,20 @@ package com.google.maps.flutter.navigation
 
 import android.view.View
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.libraries.navigation.NavigationViewForAuto
+import com.google.android.libraries.navigation.NavigationView
 
 class GoogleMapsAutoMapView
 internal constructor(
   mapOptions: MapOptions,
   viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
-  private val mapView: NavigationViewForAuto,
+  override val navigationView: NavigationView,
   map: GoogleMap,
-) : GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
+  private val onFlutterCustomNavigationAutoEvent: (String, Any) -> Unit,
+) : GoogleMapsBaseNavigationView(null, mapOptions, null, imageRegistry) {
+
   override fun getView(): View {
-    return mapView
+    return navigationView
   }
 
   init {
@@ -55,5 +57,9 @@ internal constructor(
 
   override fun onPause(): Boolean {
     return super.onPause()
+  }
+
+  fun onCustomNavigationAutoEventFromFlutter(event: String, data: Any) {
+    onFlutterCustomNavigationAutoEvent(event, data)
   }
 }

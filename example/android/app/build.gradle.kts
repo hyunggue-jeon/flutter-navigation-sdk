@@ -44,13 +44,9 @@ android {
     compileOptions {        
         // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
-        // Sets Java compatibility to Java 11
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        // Sets Java compatibility to Java 17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     // Set this to the languages you actually use, otherwise you'll include resource strings
@@ -96,6 +92,14 @@ android {
     }
 }
 
+// Configure the Kotlin JVM target via the compilerOptions DSL (replaces the deprecated
+// android.kotlinOptions block).
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 flutter {
     source = "../.."
 }
@@ -103,7 +107,7 @@ flutter {
 dependencies {
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
-    implementation("com.google.android.libraries.navigation:navigation:7.6.0")
+    implementation("com.google.android.libraries.navigation:navigation:7.6.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.0.4")
     androidTestUtil("androidx.test:orchestrator:1.5.1")
 }
